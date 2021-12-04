@@ -59,9 +59,3 @@ class ProquestSpider(scrapy.Spider):
                 'Variant' : list_Variant,
                 'url' : response.url
             })
-        # list_page_num = []
-        # for page in list_pages:
-        #     list_page_num.append("https://www.behindthename.com" + page)
-        # with open("name_urls.txt", "a+") as filehandle:
-        #     for listitem in list_page_num:
-        #         filehandle.write("%s\n" % listitem)
