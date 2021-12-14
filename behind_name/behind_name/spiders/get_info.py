@@ -1,15 +1,9 @@
 """
-This spider gets the URLs for 27k authors from pqdtopen which has been decommissioned for proquest.com
-Steps :
-Proquest open gives just first 1000 documents
-get 1964 to 2000, get 2000 to 2006, get 2006 to 2007
-Starting from 2007-08 to 2020-21 bi directional crawl for each year (CHRON and REV_CHRON)
-To run this :
-`scrapy crawl proquest`
-and this will write a list of urls on proquest which appear on the SERP
+
 """
 import scrapy
 import jsonlines
+
 
 class ProquestSpider(scrapy.Spider):
     name = "get_info"
@@ -52,10 +46,25 @@ class ProquestSpider(scrapy.Spider):
             '//*[@id="body-inner"]/div[3]/article/section[2]/div[2]/div[1]/span[2]/a/text()'
         ).getall()
 
-        with jsonlines.open('output.jsonl', mode='a') as writer:
-            writer.write({
-                "name" : name,
-                'Diminutives' : list_Diminutives,
-                'Variant' : list_Variant,
-                'url' : response.url
-            })
+        list_meaning_names = response.selector.xpath(
+            '//*[@id="body-inner"]/div[3]/article/section[1]/div[2]/a/text()'
+        ).getall()
+
+        list_links = response.selector.xpath(
+            '//*[@id="body-inner"]/div[3]/article/section[1]/div[2]/a/@href'
+        ).getall()
+
+        list_links = ["https://www.behindthename.com" + s for s in list_links]
+
+        map_dictionary = dict(zip(list_meaning_names, list_links))
+
+        with jsonlines.open("output_meaning_history.jsonl", mode="a") as writer:
+            writer.write(
+                {
+                    "name": name,
+                    "Diminutives": list_Diminutives,
+                    "Variant": list_Variant,
+                    "url": response.url,
+                    "meaning_hist_names": map_dictionary,
+                }
+            )
