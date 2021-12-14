@@ -1,12 +1,5 @@
 """
-This spider gets the URLs for 27k authors from pqdtopen which has been decommissioned for proquest.com
-Steps :
-Proquest open gives just first 1000 documents
-get 1964 to 2000, get 2000 to 2006, get 2006 to 2007
-Starting from 2007-08 to 2020-21 bi directional crawl for each year (CHRON and REV_CHRON)
-To run this :
-`scrapy crawl proquest`
-and this will write a list of urls on proquest which appear on the SERP
+
 """
 import scrapy
 
